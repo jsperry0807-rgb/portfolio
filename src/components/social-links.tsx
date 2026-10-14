@@ -9,13 +9,16 @@ export function SocialLinks({ className }: { className?: string }) {
     <div className={cn('flex items-center gap-1', className)}>
       {socials.map((social) => {
         const Icon = socialIcons[social.icon]
+        // Only web links open in a new tab; `mailto:` should hand off to the
+        // mail client instead of leaving a blank browser tab behind.
+        const isWebLink = social.href.startsWith('http')
 
         return (
           <Button key={social.label} asChild variant="ghost" size="icon">
             <a
               href={social.href}
-              target="_blank"
-              rel="noreferrer"
+              target={isWebLink ? '_blank' : undefined}
+              rel={isWebLink ? 'noreferrer' : undefined}
               aria-label={social.label}
               title={social.label}
             >

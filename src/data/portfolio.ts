@@ -72,15 +72,18 @@ export const site = {
   /** Shown under your name in the hero. Keep it to a sentence or two. */
   tagline:
     'I build full-stack web apps with TypeScript and React, and write Rust when I want to get closer to the metal.',
-  location: 'Your City, State', // TODO
-  email: 'you@example.com', // TODO
+  location: 'North East, PA',
+  email: 'jsperry0807@gmail.com',
   /** Shown as a pill at the top of the hero. Set to '' to hide it. */
   availability: 'Open to internships and collaborations',
   /**
    * Drop your resume in the `public/` folder and set this to the file name,
    * e.g. 'resume.pdf'. Set it to '' to hide the resume buttons entirely.
+   *
+   * Left empty for now so the site doesn't link to a placeholder PDF. Add your
+   * resume to `public/` and set this back to 'resume.pdf' to switch it on.
    */
-  resumeUrl: 'resume.pdf',
+  resumeUrl: '',
 }
 
 export const nav: NavItem[] = [
@@ -92,10 +95,11 @@ export const nav: NavItem[] = [
 ]
 
 export const socials: Social[] = [
-  // TODO: update these links
   { label: 'GitHub', href: 'https://github.com/jsperry0807-rgb', icon: 'github' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/your-handle', icon: 'linkedin' },
-  { label: 'Email', href: 'mailto:you@example.com', icon: 'mail' },
+  { label: 'Email', href: 'mailto:jsperry0807@gmail.com', icon: 'mail' },
+  // LinkedIn is hidden until there's a real profile to point at. Replace the URL
+  // and uncomment to bring it back:
+  // { label: 'LinkedIn', href: 'https://www.linkedin.com/in/your-handle', icon: 'linkedin' },
 ]
 
 export const about = {
@@ -225,14 +229,16 @@ export const experience: ExperienceItem[] = [
     description: 'What you did and what you contributed.',
     highlights: ['Built something with a team', 'Helped others debug their code'],
   },
-  {
-    type: 'work',
-    title: 'Your Job or Internship',
-    org: 'Company Name', // TODO
-    period: 'Summer 2025',
-    description: 'One line about your role and the impact you had.',
-    highlights: ['Shipped a feature that did X', 'Worked with Y technology'],
-  },
+  // Hidden until the real role is filled in. Replace the details below and
+  // uncomment the block to show it:
+  // {
+  //   type: 'work',
+  //   title: 'Your Job or Internship',
+  //   org: 'Company Name',
+  //   period: 'Summer 2025',
+  //   description: 'One line about your role and the impact you had.',
+  //   highlights: ['Shipped a feature that did X', 'Worked with Y technology'],
+  // },
 ]
 
 export const contact = {

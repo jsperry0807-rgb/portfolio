@@ -40,17 +40,20 @@ export function ContactPage() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="mt-10 grid gap-3 sm:grid-cols-3"
+          className="mt-10 grid gap-3 sm:grid-cols-2"
         >
           {socials.map((social) => {
             const Icon = socialIcons[social.icon]
+            // Only web links open in a new tab; `mailto:` should hand off to the
+            // mail client instead of leaving a blank browser tab behind.
+            const isWebLink = social.href.startsWith('http')
 
             return (
               <motion.li key={social.label} variants={fadeUp}>
                 <a
                   href={social.href}
-                  target="_blank"
-                  rel="noreferrer"
+                  target={isWebLink ? '_blank' : undefined}
+                  rel={isWebLink ? 'noreferrer' : undefined}
                   className="flex items-center justify-between gap-4 rounded-xl border border-border/60 bg-card/40 p-4 text-sm transition-colors hover:border-brand/40"
                 >
                   <span className="flex items-center gap-3">
