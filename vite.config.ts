@@ -9,9 +9,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  // Relative base so the site works on GitHub Pages regardless of repo name
-  // (e.g. https://user.github.io/portfolio/)
-  base: './',
+  // Must match the repository name for GitHub Pages project sites:
+  // https://<user>.github.io/portfolio/
+  // (Use '/' if you later point a custom domain at the site.)
+  base: '/portfolio/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
