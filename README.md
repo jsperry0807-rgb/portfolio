@@ -1,16 +1,59 @@
-# React + Vite
+# Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Personal portfolio site built with React, TypeScript, and Vite. Deployed automatically to GitHub Pages.
 
-Currently, two official plugins are available:
+**Live site:** https://jsperry0807-rgb.github.io/portfolio/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- **React 19** + **TypeScript** (Vite)
+- **Tailwind CSS v4** (via `@tailwindcss/vite`)
+- **shadcn/ui** — components live in `src/components/ui`, config in `components.json`
+- **Framer Motion** — animations
+- **Lucide React** — icons
+- **Font:** Geist Variable (`@fontsource-variable/geist`)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the Oxlint configuration
+```bash
+npm install
+npm run dev      # start dev server
+npm run build    # type-check + production build to dist/
+npm run preview  # preview the production build locally
+npm run lint     # oxlint
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Project structure
+
+```
+src/
+  components/ui/   # shadcn components
+  lib/utils.ts     # cn() class-merge helper
+  assets/          # images
+  App.tsx          # root component
+  index.css        # Tailwind import + shadcn theme tokens (light/dark)
+```
+
+## Adding shadcn components
+
+```bash
+npx shadcn@latest add card
+npx shadcn@latest add dialog dropdown-menu
+```
+
+Notes on this project's setup:
+
+- The `@/*` path alias maps to `src/*`. It is declared in **both** `tsconfig.json` and
+  `tsconfig.app.json` — the shadcn CLI reads the root `tsconfig.json`, so removing it there
+  breaks `shadcn add`/`init`.
+- TypeScript 7 removed `baseUrl`, so aliases use `paths` on its own.
+- Dark mode uses the `.dark` class variant (see `src/index.css`).
+
+## Deployment
+
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the site and publishes
+`dist/` to GitHub Pages. The workflow can also be run manually from the Actions tab
+("Run workflow") via `workflow_dispatch`.
+
+`vite.config.ts` sets `base: './'` (relative paths), so the build works whether the site is served
+from a subpath (`/portfolio/`) or a custom domain, with no config changes.
