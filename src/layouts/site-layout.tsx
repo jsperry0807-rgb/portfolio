@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Background } from '@/components/background'
 import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
 import { ScrollToTop } from '@/components/scroll-to-top'
@@ -10,6 +11,7 @@ import { ScrollToTop } from '@/components/scroll-to-top'
 export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-svh flex-col bg-background">
+      <Background />
       <ScrollToTop />
       <Navbar />
       {/* pt-16 clears the fixed navbar. */}

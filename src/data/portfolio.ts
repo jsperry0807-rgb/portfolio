@@ -28,11 +28,33 @@ export interface Project {
   live?: string
   /** Featured projects are highlighted in the grid. */
   featured?: boolean
+  /** GitHub repo this entry is linked to, if any. */
+  repoName?: string
+  /** Primary language, straight from GitHub. */
+  language?: string
+  stars?: number
+  /** ISO date of the last push. */
+  pushedAt?: string
+  /** True when the entry was built from live GitHub data rather than written by hand. */
+  fromGithub?: boolean
 }
 
-export interface SkillGroup {
-  title: string
-  items: string[]
+/**
+ * A hand-written entry, matched to a GitHub repo by `repoName`. These always
+ * appear on the site and define the running order, so you can curate the grid
+ * without documenting every repo on GitHub.
+ *
+ * Anything you leave out (title, description, tags) is filled in from the repo.
+ */
+export interface ProjectOverride {
+  /** Repo name on GitHub, case-insensitive. */
+  repoName: string
+  title?: string
+  /** Replaces the repo description. Required to show a repo that has none. */
+  description?: string
+  /** Merged with the repo's topics and primary language. */
+  tags?: string[]
+  featured?: boolean
 }
 
 export interface ExperienceItem {
@@ -45,11 +67,11 @@ export interface ExperienceItem {
 }
 
 export const site = {
-  name: 'Your Name', // TODO
+  name: 'Jace Sperry',
   role: 'Student & Developer',
   /** Shown under your name in the hero. Keep it to a sentence or two. */
   tagline:
-    'I build web apps and tinker with whatever catches my interest. Currently focused on learning TypeScript and shipping side projects.',
+    'I build full-stack web apps with TypeScript and React, and write Rust when I want to get closer to the metal.',
   location: 'Your City, State', // TODO
   email: 'you@example.com', // TODO
   /** Shown as a pill at the top of the hero. Set to '' to hide it. */
@@ -89,47 +111,103 @@ export const about = {
   ],
 }
 
-export const projects: Project[] = [
+/**
+ * The projects on the site. These are hand-written entries matched to your
+ * GitHub repos by `repoName` — they define the order and the copy.
+ *
+ * `tags` are filled in automatically from the technologies detected in each
+ * repo (see scripts/fetch-github.mjs), so you normally don't need to list them.
+ * Anything you don't specify (title, tags, live URL, year) comes from GitHub.
+ *
+ * Repos you own that have a description but no entry here are appended
+ * automatically — documenting a repo on GitHub is enough to get it on the site.
+ */
+export const projectOverrides: ProjectOverride[] = [
   {
-    title: 'Project One', // TODO
+    repoName: 'website-upgrader',
+    // TODO: confirm this description
     description:
-      'A short description of what this project does, why you built it, and what you learned along the way.',
-    tags: ['React', 'TypeScript', 'Tailwind'],
-    year: '2026',
-    repo: 'https://github.com/jsperry0807-rgb',
-    live: '',
+      'Crawls a site, classifies its pages, and rebuilds them as an immersive 3D experience. Express API backed by SQLite.',
     featured: true,
   },
   {
-    title: 'Project Two', // TODO
-    description:
-      'Another project. Mention the interesting technical problem you solved, not just the features.',
-    tags: ['Vite', 'Framer Motion'],
-    year: '2025',
-    repo: 'https://github.com/jsperry0807-rgb',
+    repoName: 'Voxel-Game',
     featured: true,
+    // TODO: confirm this description
+    description:
+      'A voxel engine and game written from scratch in Rust, split into a core crate and a Bevy renderer.',
   },
   {
-    title: 'Project Three', // TODO
-    description: 'Even a small tool or school project belongs here if it shows something you can do.',
-    tags: ['JavaScript'],
-    year: '2025',
-    repo: 'https://github.com/jsperry0807-rgb',
+    repoName: 'dev-journal',
+    featured: true,
+    // TODO: confirm this description
+    description:
+      'A developer journal: Express and Prisma API with background jobs, plus a React front end.',
   },
   {
-    title: 'Project Four', // TODO
-    description: 'Swap this one out, or delete it if you only want to show a few projects.',
-    tags: ['Python'],
-    year: '2024',
-    repo: 'https://github.com/jsperry0807-rgb',
+    repoName: 'idea-incubator',
+    featured: true,
+    // TODO: confirm this description
+    description:
+      'A pnpm monorepo for capturing and developing project ideas — React client, Express and Prisma API with JWT auth.',
+  },
+  {
+    repoName: 'ShadowMesh',
+    // TODO: confirm this description
+    description: 'An Electron desktop app built with React, TypeScript, and Vite.',
+  },
+  {
+    repoName: 'slot-game',
+    // TODO: confirm this description
+    description: 'A browser-based slot machine built with plain HTML, CSS, and JavaScript.',
+  },
+  {
+    repoName: 'Agent-Based-Artificial-Life-Ecosystem-Simulator',
+    title: 'Artificial Life Ecosystem',
+    // TODO: confirm this description
+    description: 'An agent-based simulation of a virtual ecosystem, written in Python.',
+  },
+  {
+    repoName: 'portfolio',
+    title: 'This Portfolio',
+    description:
+      'This site — React, TypeScript, and Tailwind, with its content generated from the GitHub API at build time.',
   },
 ]
 
-export const skillGroups: SkillGroup[] = [
-  { title: 'Languages', items: ['TypeScript', 'JavaScript', 'HTML', 'CSS'] },
-  { title: 'Frameworks & Libraries', items: ['React', 'Tailwind CSS', 'shadcn/ui', 'Framer Motion'] },
-  { title: 'Tools', items: ['Git', 'GitHub', 'Vite', 'VS Code'] },
-]
+export const projectConfig = {
+  /**
+   * Repos that never appear on the site. These have no description on GitHub
+   * yet, so there is nothing honest to show. Add a description to the repo and
+   * remove it from this list to put it back on the site.
+   */
+  hiddenRepos: ['lead-hound', 'agentic-os', 'Claude-Code-Setup', 'fullStackTwemp'],
+  /** Append your own documented repos automatically. */
+  autoIncludeDocumented: true,
+  /** Safety cap on how many auto-added repos appear. */
+  maxAutoProjects: 6,
+}
+
+/**
+ * Skills that can't be discovered from a dependency manifest — anything you
+ * use but never `npm install`. Merged into the "Tools" group.
+ */
+export const skillExtras: string[] = ['Git']
+
+/**
+ * Commit activity on the about page. The numbers come straight from GitHub's
+ * contribution calendar; this only decides which repos get named.
+ */
+export const contributionConfig = {
+  /**
+   * Counted in the totals but never listed by name — template, tutorial, and
+   * setup repos that don't say much on a portfolio. Matched on the repo name
+   * without its owner.
+   */
+  hiddenRepos: ['Vite_Template', 'Debug-Project', 'GitDemo', 'Claude-Code-Setup'],
+  /** How many repos to name before the rest are grouped into "Other". */
+  maxRepos: 6,
+}
 
 export const experience: ExperienceItem[] = [
   {

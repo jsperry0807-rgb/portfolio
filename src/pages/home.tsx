@@ -6,13 +6,13 @@ import { PageTransition } from '@/components/page-transition'
 import { ProjectCard } from '@/components/project-card'
 import { Section } from '@/components/section'
 import { Button } from '@/components/ui/button'
-import { contact, projects } from '@/data/portfolio'
+import { contact } from '@/data/portfolio'
+import { featuredProjects, projects } from '@/data/projects'
 import { fadeUp, staggerChildren, viewportOnce } from '@/lib/motion'
 
-// Prefer projects flagged as featured, but fall back to the first couple so the
-// section is never empty if you remove every `featured: true`.
-const featured = projects.filter((project) => project.featured)
-const highlights = featured.length > 0 ? featured : projects.slice(0, 2)
+// Prefer projects flagged as featured in portfolio.ts, but fall back to the
+// first couple so the section is never empty if none are flagged.
+const highlights = featuredProjects.length > 0 ? featuredProjects : projects.slice(0, 2)
 
 export function HomePage() {
   return (

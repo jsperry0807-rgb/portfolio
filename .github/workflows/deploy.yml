@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Re-pull the GitHub data daily so the project stacks, skills, and commit
+  # activity on the site stay current without a push.
+  schedule:
+    - cron: '17 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -23,6 +27,15 @@ jobs:
         with:
           node-version: 24
       - run: npm ci
+      # Refreshes src/data/github.generated.ts from the GitHub API before the
+      # build. GITHUB_TOKEN lifts the rate limit to 5000 requests/hour; the
+      # repo owner is passed in so there is no username to keep in sync.
+      # If the lookup fails the script keeps the committed snapshot and the
+      # build carries on.
+      - run: npm run sync:github
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
       - run: npm run build
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
